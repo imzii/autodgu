@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <script type="text/javascript" src="./rsa.js"></script>
+    <script type="text/javascript" src="./jsbn.js"></script>
+    <script type="text/javascript" src="./prng4.js"></script>
+    <script type="text/javascript" src="./rng.js"></script>
+    <script type="text/javascript" src="./jquery-3.6.1.min.js"></script>
+</head>
+<body>
+    <form id="form">
+        <input type="text" name="id" id="id">
+        <input type="text" name="pw" id="pw">
+        <button type="button" onclick="login()">login</button>
+        <script>
+            async function login() {
+                jQuery.ajax({
+                    url : "https://eclass.dongguk.edu/User.do?cmd=getRsaPublicKey",
+                    dataType: "json",
+                    async : true,
+                    contentType : "application/x-www-form-urlencoded; charset=UTF-8",
+                    success : function(rsaData, status, xhr) {
+                        var rsa = new RSAKey();
+                        rsa.setPublic(rsaData["pubKey1"], rsaData["pubKey2"]);
+                        var secuId = rsa.encrypt(f["userDTO.outUserId"].value);
+                        var secuPw = rsa.encrypt(f["userDTO.outPassword"].value);
+                        f["id"].value = secuId;
+                        f["pw"].value = secuPw;
+                    },
+                    error : function(xhr, status, errMsg) {
+                        alert("Error : " + errMsg);
+                        return false;
+                    }
+                });
+            }
+        </script>
+    </form>
+</body>
+</html>
