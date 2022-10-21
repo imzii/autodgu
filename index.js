@@ -1,14 +1,14 @@
-const http = require('http');
+var axios = require('axios');
 
-const hostname = '127.0.0.1';
-const port = 3000;
+var config = {
+  method: 'get',
+  url: 'https://eclass.dongguk.edu/User.do?cmd=getRsaPublicKey',
+};
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello, World!\n');
-});
-
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+axios(config)
+.then(function (response) {
+  console.log(JSON.stringify(response.data));
+})
+.catch(function (error) {
+  console.log(error);
 });
